@@ -4,16 +4,25 @@ import { useState } from "react";
 import { useParams } from 'react-router-dom';
 import NumberFormattter from "../utils/NumberFormatter";
 
-// Importing mock data for products just for testing purposes
-import products from '../placeholders/products';
-
 const ProductPage = () => {
   const [selectedSize, setSelectedSize] = useState("");
   const [selectedColor, setSelectedColor] = useState("");
   const [quantity, setQuantity] = useState(1);
 
   const urlParams = useParams();
-  const product = products.find(p => p.id === parseInt(urlParams.id));
+
+  const [product, setProduct] = useState(null);
+
+  useEffect(() => {
+    fetch(`/api/products/${urlParams.id}`)
+      .then(res => res.json())
+      .then(data => setProduct(data))
+      .catch(() => setProduct(null));
+  }, [urlParams.id]);
+
+  if (!product) {
+    return <div>Carregando produto...</div>;
+  }
 
   return (
     <div className="product-page">
@@ -43,11 +52,11 @@ const ProductPage = () => {
 
         <div className="product-details">
           <h1 className="product-title">
-            {product.name}
+            {product.nome}
             <span className="external-icon">↗</span>
           </h1>
-          <p className="product-price">R$ {NumberFormattter.format(product.price)}</p>
-          <p className="product-description">{product.description}</p>
+          <p className="product-price">R$ {NumberFormattter.format(product.preco)}</p>
+          <p className="product-description">{product.descricao}</p>
 
           {/* <div className="section">
             <p className="label">Cores</p>
