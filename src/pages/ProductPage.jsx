@@ -1,6 +1,6 @@
 import "../styles/ProductPage.css";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useParams } from 'react-router-dom';
 import NumberFormattter from "../utils/NumberFormatter";
 
@@ -14,10 +14,10 @@ const ProductPage = () => {
   const [product, setProduct] = useState(null);
 
   useEffect(() => {
-    fetch(`/api/products/${urlParams.id}`)
+    fetch(`http://localhost:8080/produtos/${urlParams.id}`)
       .then(res => res.json())
-      .then(data => setProduct(data))
-      .catch(() => setProduct(null));
+      .then(data => {console.log(data);setProduct(data)});
+      // .catch(() => setProduct(null));
   }, [urlParams.id]);
 
   if (!product) {
