@@ -16,12 +16,12 @@ const ProductPage = () => {
   useEffect(() => {
     fetch(`http://localhost:8080/produtos/${urlParams.id}`)
       .then(res => res.json())
-      .then(data => {console.log(data);setProduct(data)});
-      // .catch(() => setProduct(null));
+      .then(data => { console.log(data); setProduct(data) })
+      .catch(() => setProduct(null));
   }, [urlParams.id]);
 
   if (!product) {
-    return <div>Carregando produto...</div>;
+    return <h2>Carregando produto...</h2>;
   }
 
   return (
@@ -30,6 +30,7 @@ const ProductPage = () => {
       <div className="product-container">
         <div className="product-images">
           {
+            product.images &&
             product.images
               .map(
                 (image, index) => (
@@ -38,7 +39,7 @@ const ProductPage = () => {
           }
           {
             Array
-              .from({ length: 4 - product.images.length })
+              .from({ length: 4 - (product.images ? product.images.length : 0) })
               .map((_, index) => (
                 <div key={index} className="placeholder"></div>
               ))
@@ -58,21 +59,23 @@ const ProductPage = () => {
           <p className="product-price">R$ {NumberFormattter.format(product.preco)}</p>
           <p className="product-description">{product.descricao}</p>
 
-          {/* <div className="section">
-            <p className="label">Cores</p>
-            <div className="color-options">
-              <div
-                className={`color black ${selectedColor === "black" ? "selected" : ""
-                  }`}
-                onClick={() => setSelectedColor("black")}
-              ></div>
-              <div
-                className={`color green ${selectedColor === "green" ? "selected" : ""
-                  }`}
-                onClick={() => setSelectedColor("green")}
-              ></div>
-            </div>
-          </div> */}
+          {
+            /* <div className="section">
+              <p className="label">Cores</p>
+              <div className="color-options">
+                <div
+                  className={`color black ${selectedColor === "black" ? "selected" : ""
+                    }`}
+                  onClick={() => setSelectedColor("black")}
+                ></div>
+                <div
+                  className={`color green ${selectedColor === "green" ? "selected" : ""
+                    }`}
+                  onClick={() => setSelectedColor("green")}
+                ></div>
+              </div>
+            </div> */
+          }
 
           <div className="section">
             <p className="label">Tamanho</p>
