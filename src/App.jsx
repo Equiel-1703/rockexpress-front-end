@@ -12,8 +12,10 @@ import CheckoutPage from './pages/CheckoutPage';
 import LoginPage from './pages/LoginPage';
 import ProductPage from './pages/ProductPage';
 import ReviewsPage from './pages/ReviewsPage';
-import SellerDashboardPage from './pages/SellerDashboardPage';
 import RegisterPage from './pages/RegisterPage';
+import PaymentPage from './pages/PaymentPage';
+import SellerPage from './pages/SellerPage';
+import SellerAddPage from './pages/SellerAddPage';
 
 
 function App() {
@@ -34,9 +36,11 @@ function App() {
           <Route path="/checkout" element={<CheckoutPage />} />
           <Route path="/login" element={<LoginPage />} />
           <Route path="/reviews" element={<ReviewsPage />} />
-          <Route path="/minha-loja" element={<SellerDashboardPage />} />
           <Route path="/cadastro" element={<RegisterPage />} />
           <Route path="/novo-endereco" element={<AddAddress />} />
+          <Route path="/pagamento" element={<PaymentPage />} />
+          <Route path="/seller/:sellerId" element={<SellerPage />} />
+          <Route path="/seller/add" element={<SellerAddPage />} />
         </Route>
       </Routes>
     </div>

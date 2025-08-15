@@ -36,6 +36,13 @@ const Checkout = () => {
     );
   }
 
+  const addresses = [
+    { id: 1, title: "Endereço 1", details: "Rua Tal, número 123, Pelotas/RS", price: 10 },
+    { id: 2, title: "Endereço 2", details: "Av. Central, 456, Porto Alegre/RS", price: 15 },
+  ];
+
+   const [selectedAddress, setSelectedAddress] = useState(null);
+
   // Here we are obtaining the products from each cart item
   // In the final application, this data will come from the backend API
   const cartProducts = cart.map((item) => {
@@ -51,6 +58,13 @@ const Checkout = () => {
   const totalPrice = cartProducts.reduce((total, item) => total + (item.product.price * item.quantity), 0);
   // "Calculate" shipping cost (fixed for now)
   const shippingCost = 10;
+  const handleNext = () => {
+    if (!selectedAddress) {
+      alert("Selecione um endereço antes de continuar!");
+      return;
+    }
+    navigate("/pagamento");
+  };
 
   return (
     <div className="checkout-container">
@@ -65,14 +79,27 @@ const Checkout = () => {
 
         <p>Selecione o endereço de entrega</p>
 
-        <div className="address-card selected">
-          <input type="checkbox" checked readOnly />
-          <div>
-            <strong>Endereço 1</strong>
-            <p>Rual Tal, número 123, Pelotas/RS</p>
+        {addresses.map((address) => (
+          <div
+            key={address.id}
+            className={`address-card ${
+              selectedAddress?.id === address.id ? "selected" : ""
+            }`}
+            onClick={() => setSelectedAddress(address)}
+          >
+            <input
+              type="radio"
+              name="address"
+              checked={selectedAddress?.id === address.id}
+              readOnly
+            />
+            <div>
+              <strong>{address.title}</strong>
+              <p>{address.details}</p>
+            </div>
+            <span className="address-price">R${address.price}</span>
           </div>
-          <span className="address-price">R$10</span>
-        </div>
+        ))}
 
         <button className="add-address" onClick={handleAddAddress}>
           ADICIONAR NOVO ENDEREÇO
@@ -117,6 +144,10 @@ const Checkout = () => {
             <span>R${NumberFormatter.format(totalPrice + shippingCost)}</span>
           </div>
         </div>
+
+        <button className="proceed-btn" onClick={() => navigate("/pagamento")}>
+          PROSSEGUIR
+        </button>
       </div>
     </div>
   );

@@ -115,3 +115,28 @@
 .total-line.final {
   font-weight: bold;
 }
+
+.proceed-btn {
+  margin-top: 20px;
+  padding: 15px 30px;
+  font-size: 18px;
+  font-weight: bold;
+  color: white;
+  background: linear-gradient(90deg, #ff416c, #ff4b2b);
+  border: none;
+  border-radius: 12px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 5px 15px rgba(255, 75, 43, 0.4);
+}
+
+.proceed-btn:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 8px 20px rgba(255, 75, 43, 0.6);
+  background: linear-gradient(90deg, #ff4b2b, #ff416c);
+}
+
+.proceed-btn:active {
+  transform: translateY(1px);
+  box-shadow: 0 4px 12px rgba(255, 75, 43, 0.4);
+}
