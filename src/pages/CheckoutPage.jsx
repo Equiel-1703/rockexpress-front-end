@@ -58,13 +58,6 @@ const Checkout = () => {
   const totalPrice = cartProducts.reduce((total, item) => total + (item.product.price * item.quantity), 0);
   // "Calculate" shipping cost (fixed for now)
   const shippingCost = 10;
-  const handleNext = () => {
-    if (!selectedAddress) {
-      alert("Selecione um endereço antes de continuar!");
-      return;
-    }
-    navigate("/pagamento");
-  };
 
   return (
     <div className="checkout-container">
