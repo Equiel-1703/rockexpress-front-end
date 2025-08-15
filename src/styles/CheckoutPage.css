@@ -5,6 +5,13 @@
   background-color: #f5f8fc;
 }
 
+.checkout-empty {
+  text-align: center;
+  padding: 50px;
+  font-size: 1.2rem;
+  color: #555;
+}
+
 .checkout-left {
   flex: 2;
 }
