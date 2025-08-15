@@ -1,17 +1,33 @@
-import { useNavigate } from "react-router-dom";
 import "../styles/PaymentPage.css";
+
+import { useNavigate } from "react-router-dom";
+import NumberFormattter from "../utils/NumberFormatter";
+
+// Importing cart and products placeholder functions (THIS MUST BE CHANGED TO REAL CART LOGIC LATER)
+import { addToCart, removeFromCart, getCart } from '../placeholders/cart';
+import products from "../placeholders/products";
 
 const Payment = () => {
   const navigate = useNavigate();
 
   // Produtos do carrinho (pode vir do state ou contexto)
-  const cartItems = [
-    { id: 1, name: "Caneca System of a Down - Toxicity", size: "M", quantity: 1, price: 299 },
-    { id: 2, name: "Moletom Linkin Park Meteora", size: "M", quantity: 1, price: 99 },
-  ];
+  const cartItems = getCart();
+  // Here we are obtaining the products from each cart item
+  // In the final application, this data will come from the backend API
+  const cartProducts = cartItems.map((item) => {
+    const product = products.find((p) => p.id === item.product_id);
+    return {
+      product,
+      quantity: item.quantity,
+    };
+  }
+  );
 
+  // Fixed shipping
   const shipping = 10;
-  const subtotal = cartItems.reduce((acc, item) => acc + item.price, 0);
+
+  // Calculating subtotal and total
+  const subtotal = cartProducts.reduce((total, item) => total + (item.product.price * item.quantity), 0);
   const total = subtotal + shipping;
 
   const handleFinalize = () => {
@@ -31,7 +47,7 @@ const Payment = () => {
 
         <div className="pix-section">
           <div className="pix-input">
-            <img src="pix.png" alt="Pix" style={{ width: "100px", height: "auto" }}/>
+            <img src="pix.png" alt="Pix" style={{ width: "100px", height: "auto" }} />
           </div>
           <div className="qr-code">
             <img
@@ -44,14 +60,13 @@ const Payment = () => {
 
       <div className="payment-right">
         <h3>Sua compra</h3>
-        {cartItems.map((item) => (
-          <div key={item.id} className="cart-item">
-            <div className="cart-img" />
+        {cartProducts.map(({ product, quantity }) => (
+          <div key={product.id} className="cart-item">
+            <div className="cart-img" style={{ background: `url(${product.images[0]}) no-repeat center center / contain` }} />
             <div className="cart-info">
-              <strong>{item.name}</strong>
-              <p>Tamanho: {item.size}</p>
-              <p>Quantidade: {item.quantity}</p>
-              <p className="price">R${item.price}</p>
+              <strong>{product.name}</strong>
+              <p>Quantidade: {quantity}</p>
+              <p className="price">R${NumberFormattter.format(product.price)}</p>
             </div>
           </div>
         ))}
@@ -59,15 +74,15 @@ const Payment = () => {
         <div className="cart-total">
           <div className="total-line">
             <span>Total</span>
-            <span>R${subtotal}</span>
+            <span>R${NumberFormattter.format(subtotal)}</span>
           </div>
           <div className="total-line">
             <span>Frete</span>
-            <span>R${shipping}</span>
+            <span>R${NumberFormattter.format(shipping)}</span>
           </div>
           <div className="total-line final">
             <span>Total</span>
-            <span>R${total}</span>
+            <span>R${NumberFormattter.format(total)}</span>
           </div>
         </div>
 

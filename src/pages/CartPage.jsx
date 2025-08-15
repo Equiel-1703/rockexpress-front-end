@@ -5,7 +5,7 @@ import { useNavigate } from 'react-router-dom';
 import CartItem from '../components/CartItem';
 import OrderSummary from '../components/OrderSummary';
 
-// Importing cart placeholder functions (THIS MUST BE CHANGED TO REAL CART LOGIC LATER)
+// Importing cart and products placeholder functions (THIS MUST BE CHANGED TO REAL CART LOGIC LATER)
 import { addToCart, removeFromCart, getCart } from '../placeholders/cart';
 import products from "../placeholders/products";
 

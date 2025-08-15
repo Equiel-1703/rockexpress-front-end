@@ -54,6 +54,8 @@ const Checkout = () => {
   }
   );
 
+  console.log(cartProducts);
+
   // Calculate total price
   const totalPrice = cartProducts.reduce((total, item) => total + (item.product.price * item.quantity), 0);
   // "Calculate" shipping cost (fixed for now)
@@ -118,10 +120,11 @@ const Checkout = () => {
                     <p className="price">R${NumberFormatter.format(product.price * quantity)}</p>
                   </div>
                 </div>
-                {index < cart.length - 1 && <hr />}
               </React.Fragment>
             ))
         }
+
+        <hr />
 
         <div className="cart-total">
           <div className="total-line">
