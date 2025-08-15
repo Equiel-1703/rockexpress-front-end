@@ -4,6 +4,14 @@ import { useState, useEffect } from "react";
 import { useParams } from 'react-router-dom';
 import NumberFormattter from "../utils/NumberFormatter";
 
+// Importing cart placeholder functions (THIS MUST BE REPLACED WITH REAL DATA LATER)
+import { addToCart } from '../placeholders/cart';
+
+const handleAddToCart = (product, quantity) => {
+  addToCart(product.id, quantity);
+  alert(`Produto '${product.nome}' adicionado ao carrinho!`);
+};
+
 const ProductPage = () => {
   const [selectedSize, setSelectedSize] = useState("");
   const [selectedColor, setSelectedColor] = useState("");
@@ -94,7 +102,9 @@ const ProductPage = () => {
           </div>
 
           <div className="action-row">
-            <button className="add-to-cart">Adicionar ao carrinho</button>
+            <button className="add-to-cart" onClick={() => handleAddToCart(product, quantity)}>
+              Adicionar ao carrinho
+            </button>
             <div className="quantity-control">
               <button onClick={() => setQuantity((q) => Math.max(1, q - 1))}>
                 −

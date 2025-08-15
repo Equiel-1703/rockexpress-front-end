@@ -3,11 +3,14 @@ import '../styles/ProductCard.css';
 import { useNavigate, Link } from 'react-router-dom';
 import NumberFormatter from '../utils/NumberFormatter';
 
-export default function ProductCard({ product }) {
-  const navigate = useNavigate();
+// Importing cart placeholder functions (THIS MUST BE CHANGED TO REAL CART LOGIC LATER)
+import { addToCart } from '../placeholders/cart';
 
+export default function ProductCard({ product }) {
   const handleAddToCart = () => {
-    navigate('/carrinho');
+    addToCart(product.id, 1);
+    // Show a success message
+    alert(`Produto '${product.name}' adicionado ao carrinho!`);
   };
 
   return (
