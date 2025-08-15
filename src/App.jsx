@@ -4,6 +4,7 @@ import { Routes, Route } from 'react-router-dom';
 
 import Header from './components/Header';
 import MiniHeaderLayout from './components/MiniHeaderLayout';
+import AddAddress from "./components/AddAddress";
 
 import HomePage from './pages/HomePage';
 import CartPage from './pages/CartPage';
@@ -13,6 +14,7 @@ import ProductPage from './pages/ProductPage';
 import ReviewsPage from './pages/ReviewsPage';
 import SellerDashboardPage from './pages/SellerDashboardPage';
 import RegisterPage from './pages/RegisterPage';
+
 
 function App() {
   return (
@@ -34,6 +36,7 @@ function App() {
           <Route path="/reviews" element={<ReviewsPage />} />
           <Route path="/minha-loja" element={<SellerDashboardPage />} />
           <Route path="/cadastro" element={<RegisterPage />} />
+          <Route path="/novo-endereco" element={<AddAddress />} />
         </Route>
       </Routes>
     </div>

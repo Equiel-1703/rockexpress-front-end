@@ -1,0 +1,110 @@
+.checkout-container {
+  display: flex;
+  gap: 40px;
+  padding: 20px 40px;
+  background-color: #f5f8fc;
+}
+
+.checkout-left {
+  flex: 2;
+}
+
+.checkout-right {
+  flex: 1;
+  background: white;
+  padding: 20px;
+  border-radius: 8px;
+}
+
+.checkout-steps {
+  display: flex;
+  gap: 15px;
+  margin-bottom: 20px;
+}
+
+.checkout-steps span {
+  color: gray;
+}
+
+.checkout-steps .active {
+  font-weight: bold;
+  color: black;
+}
+
+.address-card {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border: 1px solid black;
+  border-radius: 4px;
+  padding: 10px;
+  margin-bottom: 15px;
+  background: white;
+}
+
+.address-card.selected {
+  border: 2px solid black;
+}
+
+.address-card input {
+  margin-right: 10px;
+}
+
+.address-card p {
+  margin: 2px 0;
+}
+
+.address-price {
+  font-weight: bold;
+}
+
+.add-address {
+  background: none;
+  border: none;
+  font-weight: bold;
+  cursor: pointer;
+  padding: 0;
+}
+
+.cart-item {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 15px;
+}
+
+.cart-img {
+  width: 60px;
+  height: 60px;
+  background-color: #ccc;
+  border-radius: 4px;
+}
+
+.cart-info {
+  flex: 1;
+}
+
+.cart-info a {
+  font-size: 0.8rem;
+  text-decoration: underline;
+  cursor: pointer;
+  margin-left: 10px;
+}
+
+.price {
+  font-weight: bold;
+  margin-top: 5px;
+}
+
+.cart-total {
+  margin-top: 20px;
+}
+
+.total-line {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 8px;
+}
+
+.total-line.final {
+  font-weight: bold;
+}
