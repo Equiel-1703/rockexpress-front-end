@@ -1,9 +1,9 @@
 import '../styles/HomePage.css';
 
-// Importing mock data for products
-import products from '../placeholders/products';
-
 import ProductCard from '../components/ProductCard';
+
+// Importing mock data for products (THIS MUST BE REPLACED WITH REAL DATA LATER)
+import products from '../placeholders/products';
 
 export default function HomePage() {
   return (
