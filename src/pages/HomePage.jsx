@@ -1,16 +1,31 @@
-import '../styles/HomePage.css';
+import "../styles/HomePage.css";
 
-import ProductCard from '../components/ProductCard';
+import { useState, useEffect } from "react";
+import { useParams } from 'react-router-dom';
+import ProductCard from "../components/ProductCard";
 
 // Importing mock data for products (THIS MUST BE REPLACED WITH REAL DATA LATER)
-import products from '../placeholders/products';
+// import products from '../placeholders/products';
 
 export default function HomePage() {
+  const urlParams = useParams();
+  const [produtos, setProdutos] = useState([]);
+
+  useEffect(() => {
+    fetch(`http://localhost:8080/produtos/${urlParams.id}`)
+      .then((res) => res.json())
+      .then((data) => {
+        console.log(data);
+        setProdutos(data);
+      })
+      .catch(() => setProdutos(null));
+  }, [urlParams.id]);
+
   return (
     <main className="home">
-      <h1>Exibindo {products.length} Produtos</h1>
+      <h1>Exibindo {produtos.length} Produtos</h1>
       <div className="product-grid">
-        {products.map((p) => (
+        {produtos.map((p) => (
           <ProductCard key={p.id} product={p} />
         ))}
       </div>
