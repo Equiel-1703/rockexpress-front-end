@@ -1,4 +1,5 @@
 import '../styles/SellerPage.css';
+
 import ProductCard from '../components/ProductCard';
 import products from '../placeholders/products.js';
 import { useParams } from 'react-router-dom';
@@ -10,7 +11,7 @@ export default function SellerPage() {
   const sellerProducts = products.filter((p) => p.sellerId === Number(sellerId));
   
   return (
-    <main className="seller-page">
+    <main className="seller-page-home">
       <h1>Seus Produtos</h1>
       <div className="product-grid">
         {sellerProducts.length > 0 ? (

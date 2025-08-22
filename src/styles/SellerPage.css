@@ -1,5 +1,9 @@
-.seller-page {
-  padding: 2rem;
+.seller-page-home {
+  margin: 0;
+  padding: 24px;
+
+  display: flex;
+  flex-direction: column;
 }
 
 .seller-page h1 {
