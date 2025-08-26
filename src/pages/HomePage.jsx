@@ -10,7 +10,7 @@ export default function HomePage() {
   const [produtos, setProdutos] = useState([]);
 
   useEffect(() => {
-    fetch(`http://localhost:8080/produtos/primeiros/10`)
+    fetch(`http://localhost:8080/produtos/listar/10`)
       .then((res) => res.json())
       .then((data) => {
         console.log("Produtos recebidos:", data);

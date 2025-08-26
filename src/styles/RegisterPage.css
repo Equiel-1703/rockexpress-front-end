@@ -35,11 +35,46 @@
   gap: 1rem;
 }
 
+.error-message {
+  color: #ff3333;
+  font-size: 14px;
+  margin-top: 5px;
+  display: block;
+}
+
+.account-type {
+  display: flex;
+  justify-content: space-around;
+  margin-bottom: 20px;
+}
+
+.account-type label {
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+}
+
+.account-type input {
+  margin-right: 8px;
+}
+
+.register-form div {
+  margin-bottom: 15px;
+}
+
 .register-form input {
+  width: 100%;
   padding: 0.75rem;
+  font-size: 0.95rem;
+  margin-bottom: 5px;
   border: 1px solid #ccc;
   border-radius: 4px;
-  font-size: 0.95rem;
+  box-sizing: border-box;
+}
+
+.register-form input:focus {
+  border-color: #4CAF50;
+  outline: none;
 }
 
 .register-button {
