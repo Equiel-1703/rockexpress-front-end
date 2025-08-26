@@ -1,31 +1,61 @@
 import "../styles/ProductPage.css";
-
 import { useState, useEffect } from "react";
-import { useParams } from 'react-router-dom';
+import { useParams } from "react-router-dom";
 import NumberFormattter from "../utils/NumberFormatter";
-
-// Importing cart placeholder functions (THIS MUST BE REPLACED WITH REAL DATA LATER)
-// import { addToCart } from '../placeholders/cart';
-
-const handleAddToCart = (product, quantity) => {
-  addToCart(product.id, quantity);
-  alert(`Produto '${product.nome}' adicionado ao carrinho!`);
-};
 
 const ProductPage = () => {
   const [selectedSize, setSelectedSize] = useState("");
   const [selectedColor, setSelectedColor] = useState("");
   const [quantity, setQuantity] = useState(1);
-
   const urlParams = useParams();
-
   const [product, setProduct] = useState(null);
+
+  // ⚡ Função para adicionar ao carrinho
+  const addToCart = async (productId, quantity) => {
+    try {
+      // ⚠️ aqui você precisa identificar o cliente logado (ex: clienteId=1 só para teste)
+      const clienteId = 1;
+
+      const response = await fetch(
+        `http://localhost:8080/carrinhos/${clienteId}/adicionar`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ produtoId: productId, quantidade: quantity }),
+        }
+      );
+
+      if (!response.ok) {
+        throw new Error("Erro ao adicionar ao carrinho");
+      }
+
+      const data = await response.json();
+      alert(`Produto '${product.nome}' adicionado ao carrinho!`);
+      console.log("Carrinho atualizado:", data);
+    } catch (error) {
+      console.error("Erro ao adicionar ao carrinho:", error);
+      alert("Erro ao adicionar ao carrinho");
+    }
+  };
 
   useEffect(() => {
     fetch(`http://localhost:8080/produtos/${urlParams.id}`)
-      .then(res => res.json())
-      .then(data => { console.log("Produto na ProductPage: ", data); setProduct(data) })
-      .catch(() => setProduct(null));
+      .then((res) => {
+        if (!res.ok) {
+          throw new Error("Produto não encontrado");
+        }
+        return res.json();
+      })
+      .then((data) => {
+        console.log("Produto na ProductPage: ", data);
+        setProduct(data);
+      })
+      .catch((err) => {
+        console.error("Erro ao buscar produto:", err);
+        setProduct(null);
+      });
   }, [urlParams.id]);
 
   if (!product) {
@@ -37,26 +67,15 @@ const ProductPage = () => {
       <h2 className="breadcrumb">DETALHE PRODUTO</h2>
       <div className="product-container">
         <div className="product-images">
-          {
-            product.images &&
-            product.images
-              .map(
-                (image, index) => (
-                  <img key={index} src={image} alt={`Produto ${index + 1}`} />
-                ))
-          }
-          {
-            Array
-              .from({ length: 4 - (product.images ? product.images.length : 0) })
-              .map((_, index) => (
-                <div key={index} className="placeholder"></div>
-              ))
-          }
-
-          {/* <img src="/produtos/img1.png" alt="Produto" />
-          <img src="/produtos/img2.png" alt="Produto" />
-          <div className="placeholder"></div>
-          <div className="placeholder"></div> */}
+          {product.images &&
+            product.images.map((image, index) => (
+              <img key={index} src={image} alt={`Produto ${index + 1}`} />
+            ))}
+          {Array.from({
+            length: 4 - (product.images ? product.images.length : 0),
+          }).map((_, index) => (
+            <div key={index} className="placeholder"></div>
+          ))}
         </div>
 
         <div className="product-details">
@@ -64,29 +83,16 @@ const ProductPage = () => {
             {product.nome}
             <span className="external-icon">↗</span>
           </h1>
-          <p className="product-price">R$ {NumberFormattter.format(product.preco)}</p>
+          <p className="product-price">
+            R$ {NumberFormattter.format(product.preco)}
+          </p>
           <p className="product-description">{product.descricao}</p>
 
-          {
-            /* <div className="section">
-              <p className="label">Cores</p>
-              <div className="color-options">
-                <div
-                  className={`color black ${selectedColor === "black" ? "selected" : ""
-                    }`}
-                  onClick={() => setSelectedColor("black")}
-                ></div>
-                <div
-                  className={`color green ${selectedColor === "green" ? "selected" : ""
-                    }`}
-                  onClick={() => setSelectedColor("green")}
-                ></div>
-              </div>
-            </div> */
-          }
-
           <div className="action-row">
-            <button className="add-to-cart" onClick={() => handleAddToCart(product, quantity)}>
+            <button
+              className="add-to-cart"
+              onClick={() => addToCart(product.id, quantity)}
+            >
               Adicionar ao carrinho
             </button>
             <div className="quantity-control">

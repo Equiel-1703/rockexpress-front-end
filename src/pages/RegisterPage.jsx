@@ -12,7 +12,6 @@ const RegisterPage = () => {
   const [cnpj, setCnpj] = useState("");
   const [erros, setErros] = useState({});
 
-  // Formatar CPF enquanto digita (xxx.xxx.xxx-xx)
   const formatarCPF = (valor) => {
     const v = valor.replace(/\D/g, '');
     if (v.length <= 11) {
@@ -24,7 +23,6 @@ const RegisterPage = () => {
     return valor;
   };
 
-  // Formatar CNPJ enquanto digita (xx.xxx.xxx/xxxx-xx)
   const formatarCNPJ = (valor) => {
     const v = valor.replace(/\D/g, '');
     if (v.length <= 14) {
@@ -41,12 +39,10 @@ const RegisterPage = () => {
     e.preventDefault();
     const novosErros = {};
 
-    // Validar se as senhas coincidem
     if (senha !== confirmarSenha) {
       novosErros.senha = "As senhas não coincidem.";
     }
 
-    // Validar CPF ou CNPJ conforme o tipo de conta
     if (tipoConta === "cliente") {
       const cpfNumeros = cpf.replace(/\D/g, '');
       if (cpfNumeros.length !== 11 || !/^\d+$/.test(cpfNumeros)) {
@@ -59,34 +55,28 @@ const RegisterPage = () => {
       }
     }
 
-    // Se houver erros, exibir e não prosseguir
     if (Object.keys(novosErros).length > 0) {
       setErros(novosErros);
       return;
     }
 
-    // Limpar erros se tudo estiver válido
     setErros({});
 
-    const payload =
-      tipoConta === "cliente"
-        ? { nome, email, senha, cpf: cpf.replace(/\D/g, '') }
-        : { nome, email, senha, cnpj: cnpj.replace(/\D/g, '') };
-
-    console.log("Dados da conta a ser criada:", payload);
+    // Payload único para o backend
+    const payload = {
+      tipoConta,
+      nome,
+      email,
+      senha,
+      ...(tipoConta === "cliente" ? { cpf: cpf.replace(/\D/g, '') } : { cnpj: cnpj.replace(/\D/g, '') })
+    };
 
     try {
-      const endpoint = (tipoConta === "cliente")
-        ? "http://localhost:8080/usuarios/cliente"
-        : "http://localhost:8080/usuarios/vendedor";
-
-      console.log("Endpoint:", endpoint);
+      const endpoint = "http://localhost:8080/usuarios/register"; // único endpoint
 
       const response = await fetch(endpoint, {
         method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify(payload),
       });
 
@@ -95,6 +85,7 @@ const RegisterPage = () => {
       if (response.ok) {
         console.log("Register success:", data);
         alert("Conta criada com sucesso!");
+        // opcional: limpar formulário ou redirecionar
       } else {
         console.error("Register failed:", data.message);
         alert(`Erro no cadastro: ${data.message || "Erro desconhecido"}`);
@@ -111,17 +102,13 @@ const RegisterPage = () => {
         <h2>Crie sua conta</h2>
         <p className="register-subtitle">Cadastro com Email</p>
 
-        {/* Escolha entre Cliente ou Vendedor */}
         <div className="account-type">
           <label>
             <input
               type="radio"
               value="cliente"
               checked={tipoConta === "cliente"}
-              onChange={() => {
-                setTipoConta("cliente");
-                setErros({}); // Limpar erros ao mudar o tipo
-              }}
+              onChange={() => { setTipoConta("cliente"); setErros({}); }}
             />
             Cliente (CPF)
           </label>
@@ -130,10 +117,7 @@ const RegisterPage = () => {
               type="radio"
               value="vendedor"
               checked={tipoConta === "vendedor"}
-              onChange={() => {
-                setTipoConta("vendedor");
-                setErros({}); // Limpar erros ao mudar o tipo
-              }}
+              onChange={() => { setTipoConta("vendedor"); setErros({}); }}
             />
             Vendedor (CNPJ)
           </label>
@@ -170,20 +154,13 @@ const RegisterPage = () => {
           />
           {erros.senha && <span className="error-message">{erros.senha}</span>}
 
-          {/* Campo CPF ou CNPJ dependendo do tipo de conta */}
           {tipoConta === "cliente" ? (
             <div>
               <input
                 type="text"
                 placeholder="CPF"
                 value={formatarCPF(cpf)}
-                onChange={(e) => {
-                  const valor = e.target.value;
-                  // Permite apenas números e limita a 14 caracteres (com formatação)
-                  if (valor.replace(/\D/g, '').length <= 11) {
-                    setCpf(valor);
-                  }
-                }}
+                onChange={(e) => { if (e.target.value.replace(/\D/g, '').length <= 11) setCpf(e.target.value); }}
                 maxLength="14"
                 required
               />
@@ -195,13 +172,7 @@ const RegisterPage = () => {
                 type="text"
                 placeholder="CNPJ"
                 value={formatarCNPJ(cnpj)}
-                onChange={(e) => {
-                  const valor = e.target.value;
-                  // Permite apenas números e limita a 18 caracteres (com formatação)
-                  if (valor.replace(/\D/g, '').length <= 14) {
-                    setCnpj(valor);
-                  }
-                }}
+                onChange={(e) => { if (e.target.value.replace(/\D/g, '').length <= 14) setCnpj(e.target.value); }}
                 maxLength="18"
                 required
               />
@@ -209,9 +180,7 @@ const RegisterPage = () => {
             </div>
           )}
 
-          <button type="submit" className="register-button">
-            CRIAR CONTA
-          </button>
+          <button type="submit" className="register-button">CRIAR CONTA</button>
         </form>
 
         <p className="login-link">
