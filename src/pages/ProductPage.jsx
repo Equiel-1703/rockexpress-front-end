@@ -5,7 +5,7 @@ import { useParams } from 'react-router-dom';
 import NumberFormattter from "../utils/NumberFormatter";
 
 // Importing cart placeholder functions (THIS MUST BE REPLACED WITH REAL DATA LATER)
-import { addToCart } from '../placeholders/cart';
+// import { addToCart } from '../placeholders/cart';
 
 const handleAddToCart = (product, quantity) => {
   addToCart(product.id, quantity);
@@ -24,7 +24,7 @@ const ProductPage = () => {
   useEffect(() => {
     fetch(`http://localhost:8080/produtos/${urlParams.id}`)
       .then(res => res.json())
-      .then(data => { console.log(data); setProduct(data) })
+      .then(data => { console.log("Produto na ProductPage: ", data); setProduct(data) })
       .catch(() => setProduct(null));
   }, [urlParams.id]);
 
@@ -84,22 +84,6 @@ const ProductPage = () => {
               </div>
             </div> */
           }
-
-          <div className="section">
-            <p className="label">Tamanho</p>
-            <div className="size-options">
-              {["PP", "P", "M", "G", "GG", "XG"].map((size) => (
-                <button
-                  key={size}
-                  className={`size-button ${selectedSize === size ? "active" : ""
-                    }`}
-                  onClick={() => setSelectedSize(size)}
-                >
-                  {size}
-                </button>
-              ))}
-            </div>
-          </div>
 
           <div className="action-row">
             <button className="add-to-cart" onClick={() => handleAddToCart(product, quantity)}>

@@ -56,6 +56,35 @@
   background-color: #333;
 }
 
+.account-type {
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
+  margin: 1rem 0;
+}
+
+.account-type button {
+  flex: 1;
+  padding: 0.7rem;
+  border: 2px solid #4facfe;
+  border-radius: 10px;
+  background: #fff;
+  cursor: pointer;
+  font-weight: 600;
+  color: #4facfe;
+  transition: all 0.3s ease;
+}
+
+.account-type button:hover {
+  background: #4facfe;
+  color: #fff;
+}
+
+.account-type button.active {
+  background: #4facfe;
+  color: #fff;
+}
+
 .login-link {
   font-size: 0.85rem;
   color: #999;

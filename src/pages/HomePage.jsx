@@ -1,25 +1,23 @@
 import "../styles/HomePage.css";
 
 import { useState, useEffect } from "react";
-import { useParams } from 'react-router-dom';
 import ProductCard from "../components/ProductCard";
 
 // Importing mock data for products (THIS MUST BE REPLACED WITH REAL DATA LATER)
 // import products from '../placeholders/products';
 
 export default function HomePage() {
-  const urlParams = useParams();
   const [produtos, setProdutos] = useState([]);
 
   useEffect(() => {
-    fetch(`http://localhost:8080/produtos/${urlParams.id}`)
+    fetch(`http://localhost:8080/produtos/primeiros/10`)
       .then((res) => res.json())
       .then((data) => {
-        console.log(data);
+        console.log("Produtos recebidos:", data);
         setProdutos(data);
       })
       .catch(() => setProdutos(null));
-  }, [urlParams.id]);
+  }, []);
 
   return (
     <main className="home">

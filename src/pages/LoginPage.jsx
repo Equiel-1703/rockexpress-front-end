@@ -1,16 +1,39 @@
 import "../styles/LoginPage.css";
 
-import React, { useState } from "react";
+import { useState } from "react";
 import { Link } from "react-router-dom";
 
 const LoginPage = () => {
   const [email, setEmail] = useState("");
   const [senha, setSenha] = useState("");
+  // const [product, setProduct] = useState(null);
 
-  const handleLogin = (e) => {
+  const handleLogin = async (e) => {
     e.preventDefault();
-    console.log("Login:", email, senha);
-    // aqui você pode chamar a API ou redirecionar
+
+    console.log("Fazendo login...");
+
+    try {
+      const response = await fetch("http://localhost:8080/usuarios/login", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json", // tell backend we're sending JSON
+        },
+        body: JSON.stringify({ email, senha }), // send login data
+      });
+
+      const data = await response.json();
+
+      if (response.ok) {
+        console.log("Login success:", data);
+        // maybe save token in localStorage
+        localStorage.setItem("token", data.token);
+      } else {
+        console.error("Login failed:", data.message);
+      }
+    } catch (error) {
+      console.error("Error:", error);
+    }
   };
 
   return (
