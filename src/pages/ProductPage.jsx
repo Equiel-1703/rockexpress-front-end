@@ -38,7 +38,7 @@ const ProductPage = () => {
       const data = await response.json();
       const ultimoItem = data.itens[data.itens.length - 1];
 
-      // ⚡ Aqui usamos a propriedade correta do DTO
+      // Aqui usamos a propriedade do DTO
       alert(`Produto '${ultimoItem.nomeProduto}' adicionado ao carrinho!`);
 
       console.log("Carrinho atualizado:", {

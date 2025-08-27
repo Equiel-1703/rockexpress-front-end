@@ -1,75 +1,104 @@
-import '../styles/Cart.css'
-
-import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-import CartItem from '../components/CartItem';
-import OrderSummary from '../components/OrderSummary';
-
-// Importing cart and products placeholder functions (THIS MUST BE CHANGED TO REAL CART LOGIC LATER)
-import { addToCart, removeFromCart, getCart } from '../placeholders/cart';
-import products from "../placeholders/products";
+import "../styles/Cart.css";
+import React, { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
+import CartItem from "../components/CartItem";
+import OrderSummary from "../components/OrderSummary";
 
 export default function CartPage() {
   const navigate = useNavigate();
-  const [cartItems, setCartItems] = useState(getCart());
+  const [cart, setCart] = useState(null);
+  const [loading, setLoading] = useState(true);
 
-  const handleRemoveItem = id => {
-    // Call API to remove cart item from DB
-    removeFromCart(id);
+  const clienteId = localStorage.getItem("clienteId");
 
-    const newCartItems = cartItems.filter(item => item.product_id !== id);
+  useEffect(() => {
+    if (!clienteId) {
+      alert("Você precisa estar logado como cliente para ver o carrinho.");
+      navigate("/login");
+      return;
+    }
 
-    setCartItems(newCartItems);
+    const fetchCart = async () => {
+      try {
+        const response = await fetch(`http://localhost:8080/carrinhos/${clienteId}`);
+        if (response.ok) {
+          const data = await response.json();
+          console.log("Carrinho carregado:", data);
+          setCart(data);
+        } else {
+          console.error("Erro ao carregar carrinho:", response.status);
+          setCart({ itens: [], valorTotal: 0 });
+        }
+      } catch (error) {
+        console.error("Erro na requisição do carrinho:", error);
+        setCart({ itens: [], valorTotal: 0 });
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchCart();
+  }, [clienteId, navigate]);
+
+  const handleRemoveItem = async (produtoId) => {
+    try {
+      const response = await fetch(`http://localhost:8080/carrinhos/${clienteId}/remover/${produtoId}`, {
+        method: "DELETE",
+      });
+
+      if (response.ok) {
+        const updatedCart = await response.json();
+        setCart(updatedCart);
+      } else {
+        console.error("Erro ao remover item:", response.status);
+      }
+    } catch (error) {
+      console.error("Erro na requisição de remover item:", error);
+    }
   };
 
-  if (cartItems.length < 1) {
+  if (loading) {
+    return <p>Carregando carrinho...</p>;
+  }
+
+  if (!cart || cart.itens.length === 0) {
     return (
       <div className="empty-cart">
         <h3>Seu carrinho está vazio.</h3>
-        <p>Adicione produtos para vê-los aqui.</p>
+        <p>
+          Adicione produtos para vê-los aqui.{" "}
+          <a href="#" onClick={(e) => { e.preventDefault(); navigate("/"); }}>
+            Continue comprando
+          </a>
+        </p>
       </div>
     );
   }
-
-  // Here we are obtaining the products from each cart item
-  // In the final application, this data will come from the backend API
-  const cartProducts = cartItems.map((item) => {
-    const product = products.find((p) => p.id === item.product_id);
-    return {
-      product,
-      quantity: item.quantity,
-    };
-  }
-  );
-
-  // Calculate total price
-  const totalPrice = cartProducts.reduce((total, item) => total + (item.product.price * item.quantity), 0);
 
   return (
     <div className="container">
       <main className="main-content">
         <div className="cart-header">
           <h1>Carrinho</h1>
-          <p>
-            Deseja ver mais produtos? <a href="#" onClick={(e) => { e.preventDefault(); navigate('/') }}>Continue comprando</a>
-          </p>
         </div>
 
         <div className="cart-grid">
           <div className="cart-items-container">
-            {<div>
-              {cartProducts.map(({ product, quantity }) => (
-                <CartItem key={product.id} item={product} quantity={quantity} onRemove={handleRemoveItem} />
-              ))}
-            </div>
-            }
+            {cart.itens.map((item) => (
+              <CartItem
+                key={item.produtoId}
+                item={{ id: item.produtoId, nome: item.nomeProduto, preco: item.preco }}
+                quantity={item.quantidade}
+                onRemove={() => handleRemoveItem(item.produtoId)}
+              />
+            ))}
           </div>
 
           <div className="order-summary-container">
-            <OrderSummary total={totalPrice} />
+            <OrderSummary total={cart.valorTotal} />
           </div>
         </div>
-      </main >
-    </div >
+      </main>
+    </div>
   );
 }

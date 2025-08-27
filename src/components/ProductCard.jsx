@@ -1,19 +1,41 @@
 import "../styles/ProductCard.css";
-
-import { useNavigate, Link } from "react-router-dom";
+import { Link } from "react-router-dom";
 import NumberFormatter from "../utils/NumberFormatter";
 
-// Importing cart placeholder functions (THIS MUST BE CHANGED TO REAL CART LOGIC LATER)
-import { addToCart } from "../placeholders/cart";
-
 export default function ProductCard({ product }) {
-  const handleAddToCart = () => {
-    addToCart(product.id, 1);
-    // Show a success message
-    alert(`Produto '${product.name}' adicionado ao carrinho!`);
-  };
+  const handleAddToCart = async () => {
+    const clienteId = localStorage.getItem("clienteId");
 
-  console.log("Produto recebido no ProductCard: ", product);
+    if (!clienteId) {
+      alert("Você precisa estar logado como cliente para adicionar ao carrinho!");
+      return;
+    }
+
+    try {
+      const response = await fetch(
+        `http://localhost:8080/carrinhos/${clienteId}/adicionar`,
+        {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            produtoId: product.id,
+            quantidade: 1,
+          }),
+        }
+      );
+
+      if (!response.ok) {
+        throw new Error("Erro ao adicionar produto ao carrinho");
+      }
+
+      const data = await response.json();
+      alert(`Produto '${product.nome}' adicionado ao carrinho!`);
+      console.log("Carrinho atualizado:", data);
+    } catch (err) {
+      console.error(err);
+      alert("Não foi possível adicionar ao carrinho.");
+    }
+  };
 
   return (
     <div className="product-card">
@@ -31,7 +53,8 @@ export default function ProductCard({ product }) {
       </Link>
       <p>R$ {NumberFormatter.format(product.preco)}</p>
       <p>
-        Estoque: <strong>{product.estoque > 0 ? product.estoque : "Indisponível"}</strong>
+        Estoque:{" "}
+        <strong>{product.estoque > 0 ? product.estoque : "Indisponível"}</strong>
       </p>
       <button onClick={handleAddToCart}>Adicionar ao carrinho</button>
     </div>
