@@ -13,8 +13,12 @@ const ProductPage = () => {
   // ⚡ Função para adicionar ao carrinho
   const addToCart = async (productId, quantity) => {
     try {
-      // ⚠️ aqui você precisa identificar o cliente logado (ex: clienteId=1 só para teste)
-      const clienteId = 1;
+      const clienteId = localStorage.getItem("clienteId");
+
+      if (!clienteId) {
+        alert("Você precisa estar logado como cliente para adicionar ao carrinho!");
+        return;
+      }
 
       const response = await fetch(
         `http://localhost:8080/carrinhos/${clienteId}/adicionar`,
@@ -32,8 +36,21 @@ const ProductPage = () => {
       }
 
       const data = await response.json();
-      alert(`Produto '${product.nome}' adicionado ao carrinho!`);
-      console.log("Carrinho atualizado:", data);
+      const ultimoItem = data.itens[data.itens.length - 1];
+
+      // ⚡ Aqui usamos a propriedade correta do DTO
+      alert(`Produto '${ultimoItem.nomeProduto}' adicionado ao carrinho!`);
+
+      console.log("Carrinho atualizado:", {
+        id: data.id,
+        valorTotal: data.valorTotal,
+        itens: data.itens.map(i => ({
+          produtoId: i.produtoId,
+          nome: i.nomeProduto,
+          quantidade: i.quantidade,
+          preco: i.preco
+        }))
+      });
     } catch (error) {
       console.error("Erro ao adicionar ao carrinho:", error);
       alert("Erro ao adicionar ao carrinho");
@@ -43,9 +60,7 @@ const ProductPage = () => {
   useEffect(() => {
     fetch(`http://localhost:8080/produtos/${urlParams.id}`)
       .then((res) => {
-        if (!res.ok) {
-          throw new Error("Produto não encontrado");
-        }
+        if (!res.ok) throw new Error("Produto não encontrado");
         return res.json();
       })
       .then((data) => {

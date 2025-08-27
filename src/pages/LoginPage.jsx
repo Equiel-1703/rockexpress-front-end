@@ -10,13 +10,11 @@ const LoginPage = () => {
   const handleLogin = async (e) => {
     e.preventDefault();
 
-    console.log("Fazendo login...");
-
     try {
       const response = await fetch("http://localhost:8080/usuarios/login", {
         method: "POST",
         headers: {
-          "Content-Type": "application/json", 
+          "Content-Type": "application/json",
         },
         body: JSON.stringify({ email, senha }),
       });
@@ -31,6 +29,16 @@ const LoginPage = () => {
         localStorage.setItem("email", data.email);
         localStorage.setItem("nome", data.nome);
         localStorage.setItem("nivelAcesso", data.nivelAcesso);
+
+        // se for cliente, salva clienteId
+        if (data.clienteId) {
+          localStorage.setItem("clienteId", data.clienteId);
+        }
+
+        // se for vendedor, salva vendedorId
+        if (data.vendedorId) {
+          localStorage.setItem("vendedorId", data.vendedorId);
+        }
 
         // Redireciona para homepage
         navigate("/");
