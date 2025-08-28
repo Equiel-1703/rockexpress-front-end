@@ -1,6 +1,6 @@
 import TrashIcon from "./TrashIcon";
 
-const CartItem = ({ item, quantity, onRemove }) => (
+const CartItem = ({ item, quantity, onRemove, onUpdateQuantity }) => (
   <div className="cart-item">
     <div className="cart-item-image">
       <img
@@ -15,7 +15,13 @@ const CartItem = ({ item, quantity, onRemove }) => (
 
     <div className="cart-item-details">
       <h3>{item.name || item.nome}</h3>
-      <p className="item-meta">Quantidade: {quantity}</p>
+
+      <div className="quantity-controls">
+        <button onClick={() => onUpdateQuantity(-1)} disabled={quantity <= 1}>-</button>
+        <span>{quantity}</span>
+        <button onClick={() => onUpdateQuantity(1)}>+</button>
+      </div>
+
       <div className="cart-item-footer">
         <p className="cart-item-price">
           R${(item.price || item.preco || 0).toFixed(2).replace('.', ',')}
