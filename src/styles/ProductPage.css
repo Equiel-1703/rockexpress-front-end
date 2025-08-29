@@ -18,17 +18,14 @@
   border-radius: 8px;
 }
 
-.product-images {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 1rem;
+.product-image {
   width: 50%;
 }
 
-.product-images img,
-.product-images .placeholder {
+.product-image img,
+.product-image .placeholder {
   width: 100%;
-  aspect-ratio: 1/1;
+  height: 100%;
   object-fit: cover;
   border-radius: 6px;
   background-color: #ddd;

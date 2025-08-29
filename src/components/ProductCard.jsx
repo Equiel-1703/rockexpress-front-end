@@ -40,9 +40,9 @@ export default function ProductCard({ product }) {
   return (
     <div className="product-card">
       <Link to={`/produto/${product.id}`} className="unstyled-link">
-        {product.images && product.images.length > 0 ? (
+        {product.imagemBase64 !== null ? (
           <img
-            src={product.images[0]}
+            src={product.imagemBase64}
             alt={product.nome}
             className="product-img"
           />

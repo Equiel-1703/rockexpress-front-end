@@ -1,3 +1,5 @@
+import '../styles/HomePage.css'
+
 import { useEffect, useState } from "react";
 import ProductCard from "./ProductCard";
 
@@ -21,7 +23,7 @@ export default function ProductList() {
   if (error) return <p>Erro: {error}</p>;
 
   return (
-    <div className="product-list">
+    <div className="product-grid">
       {products.length > 0 ? (
         products.map((p) => <ProductCard key={p.id} product={p} />)
       ) : (

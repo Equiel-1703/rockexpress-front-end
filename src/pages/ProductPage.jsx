@@ -64,7 +64,6 @@ const ProductPage = () => {
         return res.json();
       })
       .then((data) => {
-        console.log("Produto na ProductPage: ", data);
         setProduct(data);
       })
       .catch((err) => {
@@ -72,6 +71,9 @@ const ProductPage = () => {
         setProduct(null);
       });
   }, [urlParams.id]);
+
+  // Pegar nome do vendedor
+  console.log("produto: ", product);
 
   if (!product) {
     return <h2>Carregando produto...</h2>;
@@ -81,16 +83,12 @@ const ProductPage = () => {
     <div className="product-page">
       <h2 className="breadcrumb">DETALHE PRODUTO</h2>
       <div className="product-container">
-        <div className="product-images">
-          {product.images &&
-            product.images.map((image, index) => (
-              <img key={index} src={image} alt={`Produto ${index + 1}`} />
-            ))}
-          {Array.from({
-            length: 4 - (product.images ? product.images.length : 0),
-          }).map((_, index) => (
-            <div key={index} className="placeholder"></div>
-          ))}
+        <div className="product-image">
+          {product.imagemBase64 ? (
+            <img src={product.imagemBase64} alt={product.nome} />
+          ) : (
+            <div className="placeholder"></div>
+          )}
         </div>
 
         <div className="product-details">

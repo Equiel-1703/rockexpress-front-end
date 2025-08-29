@@ -7,6 +7,9 @@ import InputAdornment from '@mui/material/InputAdornment';
 import SearchRoundedIcon from '@mui/icons-material/SearchRounded';
 
 export default function Header() {
+  const nivelAcesso = localStorage.getItem('nivelAcesso');
+  console.log(nivelAcesso);
+
   return (
     <header className="header">
       <div className="header-upper">
@@ -64,6 +67,9 @@ export default function Header() {
         />
 
         <Link to="/login">LOGIN/CADASTRO</Link>
+        {nivelAcesso === 'VENDEDOR' && (
+          <Link to="/seller/add">ADICIONAR PRODUTO</Link>
+        )}
       </nav>
     </header>
   );

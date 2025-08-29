@@ -62,6 +62,12 @@ body {
   font-weight: 700;
 }
 
+#product-name {
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  padding: 0.5rem;
+}
+
 .price-section {
   display: flex;
   gap: 1rem;
